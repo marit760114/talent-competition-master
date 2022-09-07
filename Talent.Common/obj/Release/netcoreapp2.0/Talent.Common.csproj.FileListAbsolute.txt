@@ -1,0 +1,10 @@
+C:\Users\Amy\Desktop\talent-competition-master\Talent.Common\bin\Release\netcoreapp2.0\Talent.Common.deps.json
+C:\Users\Amy\Desktop\talent-competition-master\Talent.Common\bin\Release\netcoreapp2.0\Talent.Common.dll
+C:\Users\Amy\Desktop\talent-competition-master\Talent.Common\bin\Release\netcoreapp2.0\Talent.Common.pdb
+C:\Users\Amy\Desktop\talent-competition-master\Talent.Common\obj\Release\netcoreapp2.0\Talent.Common.csproj.AssemblyReference.cache
+C:\Users\Amy\Desktop\talent-competition-master\Talent.Common\obj\Release\netcoreapp2.0\Talent.Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Amy\Desktop\talent-competition-master\Talent.Common\obj\Release\netcoreapp2.0\Talent.Common.AssemblyInfoInputs.cache
+C:\Users\Amy\Desktop\talent-competition-master\Talent.Common\obj\Release\netcoreapp2.0\Talent.Common.AssemblyInfo.cs
+C:\Users\Amy\Desktop\talent-competition-master\Talent.Common\obj\Release\netcoreapp2.0\Talent.Common.csproj.CoreCompileInputs.cache
+C:\Users\Amy\Desktop\talent-competition-master\Talent.Common\obj\Release\netcoreapp2.0\Talent.Common.dll
+C:\Users\Amy\Desktop\talent-competition-master\Talent.Common\obj\Release\netcoreapp2.0\Talent.Common.pdb
