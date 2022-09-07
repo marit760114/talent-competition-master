@@ -329,7 +329,7 @@ export default class ManageJob extends React.Component {
             return (
                 <div>
                     <h2> L O A D I N G .....</h2>
-                    <Button primary onClick={() => this.loadData()}>getEmployerJobs</Button>
+                    <Button primary onClick={() => this.loadData()}>Get Employer Jobs</Button>
                 </div>);
         }
     }
