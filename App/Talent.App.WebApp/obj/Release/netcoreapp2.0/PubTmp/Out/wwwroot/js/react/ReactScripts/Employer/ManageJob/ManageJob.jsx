@@ -66,9 +66,7 @@ export default class ManageJob extends React.Component {
     };
 
     loadData(callback) {
-        var link = 'http://talentservicestalent.azurewebsites.net/listing/listing/getSortedEmployerJobs';
-
-        //var link = 'http://localhost:51689/listing/listing/getSortedEmployerJobs';
+        var link = 'https://talentservicestalent.azurewebsites.net/listing/listing/getSortedEmployerJobs';
 
         var cookies = Cookies.get('talentAuthToken');
         // your ajax call and other logic goes here
@@ -201,7 +199,6 @@ export default class ManageJob extends React.Component {
                                         <Accordion as={Menu} vertical>
                                             <Menu.Item>
                                                 <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
-                                                    {/*      */}
                                                     <Icon name='dropdown' />
                                                     By Status
                                                 </Accordion.Title>

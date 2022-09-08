@@ -89,3 +89,4 @@ webpack-dev-server 4.8.1
   * Deploy a copy to Azure
   * Notify your mentor using the industryconnect.io internship portal
 
+http://localhost:60998, https://talentservicesidentity.azurewebsites.net/
