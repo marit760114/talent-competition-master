@@ -10,7 +10,7 @@ export const FormErrors = ({ formErrors }) =>
                         <li key={i}>{fieldName} {formErrors[fieldName]}</li>
                     )
                 } else {
-                    return '';
+                    return String.IsNullOrWhiteSpace(string);
                 }
             })}
         </ul>

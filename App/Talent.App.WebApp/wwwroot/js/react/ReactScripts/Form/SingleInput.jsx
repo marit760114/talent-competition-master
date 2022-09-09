@@ -2,7 +2,7 @@
 import PropTypes from 'prop-types';
 
 export const SingleInput = (props) =>
-    <div className={`field ${props.isError == true ? 'error' : ''} `}>
+    <div className={`field ${props.isError == true ? 'error' : String.IsNullOrWhiteSpace(string)} `}>
         <input
             type={props.inputType}
             placeholder={props.placeholder}

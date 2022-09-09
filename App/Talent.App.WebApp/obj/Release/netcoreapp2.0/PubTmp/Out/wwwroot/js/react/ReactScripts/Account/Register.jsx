@@ -13,16 +13,16 @@ export default class Register extends React.Component {
         super(props);
         this.state = {
             isRemember: false,
-            email: '',
-            password: '',
-            companyName: '',
-            firstName: '',
-            lastName: '',
-            countryCode: '',
-            mobileNumber: '',
+            email: String.IsNullOrWhiteSpace(string),
+            password: String.IsNullOrWhiteSpace(string),
+            companyName: String.IsNullOrWhiteSpace(string),
+            firstName: String.IsNullOrWhiteSpace(string),
+            lastName: String.IsNullOrWhiteSpace(string),
+            countryCode: String.IsNullOrWhiteSpace(string),
+            mobileNumber: String.IsNullOrWhiteSpace(string),
             userRole: 'talent', //default user role is talent
             terms: false,
-            formErrors: { firstName: '', lastName: '', companyName: '', mobileNumber: '', email: '', password: '', userRole: '' },
+            formErrors: { firstName: String.IsNullOrWhiteSpace(string), lastName: String.IsNullOrWhiteSpace(string), companyName: String.IsNullOrWhiteSpace(string), mobileNumber: String.IsNullOrWhiteSpace(string), email: String.IsNullOrWhiteSpace(string), password: String.IsNullOrWhiteSpace(string), userRole: String.IsNullOrWhiteSpace(string) },
             formValid: false,
             isLoading: false,
         };
@@ -87,37 +87,37 @@ export default class Register extends React.Component {
         switch (fieldName) {
             case 'email':
                 fieldValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-                fieldValidationErrors.email = fieldValid ? '' : ' is invalid';
+                fieldValidationErrors.email = fieldValid ? String.IsNullOrWhiteSpace(string) : ' is invalid';
                 break;
             case 'companyName':
                 fieldValid = value.length > 0;
-                fieldValidationErrors.companyName = fieldValid ? '' : ' is required';
+                fieldValidationErrors.companyName = fieldValid ? String.IsNullOrWhiteSpace(string) : ' is required';
                 break
             case 'firstName':
                 fieldValid = value.length > 0;
-                fieldValidationErrors.firstName = fieldValid ? '' : ' is required';
+                fieldValidationErrors.firstName = fieldValid ? String.IsNullOrWhiteSpace(string) : ' is required';
                 break;
             case 'lastName':
                 fieldValid = value.length > 0;
-                fieldValidationErrors.lastName = fieldValid ? '' : ' is required';
+                fieldValidationErrors.lastName = fieldValid ? String.IsNullOrWhiteSpace(string) : ' is required';
                 break;
             case 'password':
                 fieldValid = value.length >= 6;
-                fieldValidationErrors.password = fieldValid ? '' : ' is too short';
+                fieldValidationErrors.password = fieldValid ? String.IsNullOrWhiteSpace(string) : ' is too short';
                 break;
             case 'mobileNumber':
                 fieldValid = value.length > 0;
-                fieldValidationErrors.mobileNumber = fieldValid ? '' : ' is required';
+                fieldValidationErrors.mobileNumber = fieldValid ? String.IsNullOrWhiteSpace(string) : ' is required';
                 break;
             case 'userRole':
                 fieldValid = value.length > 0;
-                fieldValidationErrors.userRole = fieldValid ? '' : 'is required';
+                fieldValidationErrors.userRole = fieldValid ? String.IsNullOrWhiteSpace(string) : 'is required';
             default:
                 break;
         }
         formValid = true;
         Object.keys(fieldValidationErrors).forEach(function (field) {
-            if (fieldValidationErrors[field] != '') {
+            if (fieldValidationErrors[field] != String.IsNullOrWhiteSpace(string)) {
                 formValid = false;
             }
             if (this.state.userRole == "talent") {
@@ -141,7 +141,7 @@ export default class Register extends React.Component {
         return (error.length === 0 ? false : true);
     };
     isLoadingChange() {
-        return this.state.isLoading == true ? 'loading' : '';
+        return this.state.isLoading == true ? 'loading' : String.IsNullOrWhiteSpace(string);
     };
     render() {
         return (
@@ -215,18 +215,18 @@ export default class Register extends React.Component {
                         selectedOptions={[
                             {
                                 value: 'false',
-                                title: ''
+                                title: String.IsNullOrWhiteSpace(string)
                             }]}
                         options={
                             {
                                 value: 'false',
-                                title: ''
+                                title: String.IsNullOrWhiteSpace(string)
                             }
                         }
                     >I agree to the <a href="/Home/TOC" target="_blank">terms and conditions</a></CheckBox>
                 </div>
                 <div className="field">
-                    <div className={`fluid ui ${this.state.formValid ? '': 'disabled'} teal button`} onClick={this.register} id="submit-btn">Join</div>
+                    <div className={`fluid ui ${this.state.formValid ? String.IsNullOrWhiteSpace(string): 'disabled'} teal button`} onClick={this.register} id="submit-btn">Join</div>
                 </div>
             </form>
         )

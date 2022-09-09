@@ -18,7 +18,7 @@ export default class EmployeeProfile extends React.Component {
             employerData: {
                 skills: []
             },
-            formErrors: { name: '', email: '' },
+            formErrors: { name: String.IsNullOrWhiteSpace(string), email: String.IsNullOrWhiteSpace(string) },
             nameValid: false,
             emailValid: false,
             formValid: true,
@@ -122,12 +122,12 @@ export default class EmployeeProfile extends React.Component {
         switch (fieldName) {
             case 'email':
                 emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-                fieldValidationErrors.email = emailValid ? '' : ' is invalid';
+                fieldValidationErrors.email = emailValid ? String.IsNullOrWhiteSpace(string) : ' is invalid';
                 formValid = emailValid != null;
                 break;
             case 'name':
                 nameValid = value.match('\w');
-                fieldValidationErrors.nameValid = nameValid ? '' : ' is invalid';
+                fieldValidationErrors.nameValid = nameValid ? String.IsNullOrWhiteSpace(string) : ' is invalid';
                 formValid = nameValid;
                 break;
             default:
@@ -146,7 +146,7 @@ export default class EmployeeProfile extends React.Component {
     }
 
     isFormValid() {
-        return this.state.formValid == false ? 'error' : '';
+        return this.state.formValid == false ? 'error' : String.IsNullOrWhiteSpace(string);
     }
 
     saveData() {

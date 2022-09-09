@@ -10,8 +10,8 @@ export class EmailVerification extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: '',
-            formErrors: { email: '' },
+            email: String.IsNullOrWhiteSpace(string),
+            formErrors: { email: String.IsNullOrWhiteSpace(string) },
             emailValid: false,
             formValid: true,
             isLoading: false
@@ -43,7 +43,7 @@ export class EmailVerification extends React.Component {
         switch (fieldName) {
             case 'email':
                 emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-                fieldValidationErrors.email = emailValid ? '' : ' is invalid';
+                fieldValidationErrors.email = emailValid ? String.IsNullOrWhiteSpace(string) : ' is invalid';
                 break;
             default:
                 break;
@@ -91,11 +91,11 @@ export class EmailVerification extends React.Component {
     };
 
     isFormValid() {
-        return this.state.formValid == false ? 'error' : '';
+        return this.state.formValid == false ? 'error' : String.IsNullOrWhiteSpace(string);
     };
 
     isLoadingChange() {
-        return this.state.isLoading == true ? 'loading' : '';
+        return this.state.isLoading == true ? 'loading' : String.IsNullOrWhiteSpace(string);
     };
     render() {
         return (
@@ -112,7 +112,7 @@ export class EmailVerification extends React.Component {
                         errorMessage="Please enter your email address"
                         controlFunc={this.handleUserInput} />
                     <div className="field">
-                        <div className={`fluid ui teal button ${this.state.formValid ? '' : 'disabled'}`} onClick={this.verifyEmail}>Send Verification Email</div>
+                        <div className={`fluid ui teal button ${this.state.formValid ? String.IsNullOrWhiteSpace(string) : 'disabled'}`} onClick={this.verifyEmail}>Send Verification Email</div>
                     </div>
                 </form>
             </div>

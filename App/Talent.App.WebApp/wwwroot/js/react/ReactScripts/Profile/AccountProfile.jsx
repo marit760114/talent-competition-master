@@ -25,15 +25,15 @@ export default class AccountProfile extends React.Component {
         this.state = {
             profileData: {
                 address: {},
-                nationality: '',
+                nationality: String.IsNullOrWhiteSpace(string),
                 education: [],
                 languages: [],
                 skills: [],
                 experience: [],
                 certifications: [],
-                visaStatus: '',
-                visaExpiryDate: '',
-                profilePhoto: '',
+                visaStatus: String.IsNullOrWhiteSpace(string),
+                visaExpiryDate: String.IsNullOrWhiteSpace(string),
+                profilePhoto: String.IsNullOrWhiteSpace(string),
                 linkedAccounts: {
                     linkedIn: "",
                     github: ""

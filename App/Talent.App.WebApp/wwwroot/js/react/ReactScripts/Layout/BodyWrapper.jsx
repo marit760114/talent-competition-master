@@ -12,7 +12,7 @@ export class BodyWrapper extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            userRole: '',
+            userRole: String.IsNullOrWhiteSpace(string),
             err: 0
         }
         this.loadData = this.loadData.bind(this);

@@ -8,8 +8,8 @@ export default class ForgotPassword extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: '',
-            formErrors: { email: '' },
+            email: String.IsNullOrWhiteSpace(string),
+            formErrors: { email: String.IsNullOrWhiteSpace(string) },
             isLoading: false,
             isResetSuccess: false
         };
@@ -59,7 +59,7 @@ export default class ForgotPassword extends React.Component {
     };
 
     isLoadingChange() {
-        return this.state.isLoading == true ? 'loading' : '';
+        return this.state.isLoading == true ? 'loading' : String.IsNullOrWhiteSpace(string);
     };
 
     render() {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 export const CheckBox = (props) => (
     <div className="field">
-        <div className={`ui checkbox ${props.isChecked ? 'check' : ''}`}>
+        <div className={`ui checkbox ${props.isChecked ? 'check' : String.IsNullOrWhiteSpace(string)}`}>
             <input
                 type="checkbox"
                 name={props.setName}

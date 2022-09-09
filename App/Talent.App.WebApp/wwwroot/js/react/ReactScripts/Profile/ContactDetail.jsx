@@ -197,7 +197,7 @@ export class CompanyDetailSection extends Component {
     }
 
     renderEdit() {
-        let location = { city: '', country: '' }
+        let location = { city: String.IsNullOrWhiteSpace(string), country: String.IsNullOrWhiteSpace(string) }
         if (this.state.newContact && this.state.newContact.location) {
             location = this.state.newContact.location
         }
@@ -248,7 +248,7 @@ export class CompanyDetailSection extends Component {
         let companyName = this.props.details ? this.props.details.name : ""
         let email = this.props.details ? this.props.details.email : ""
         let phone = this.props.details ? this.props.details.phone : ""
-        let location = {city:'',country:''}
+        let location = {city:String.IsNullOrWhiteSpace(string),country:String.IsNullOrWhiteSpace(string)}
         if (this.props.details && this.props.details.location) {
             location = this.props.details.location
         }

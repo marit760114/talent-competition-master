@@ -15,8 +15,8 @@ export default class AuthenticatingBanner extends React.Component {
         super(props)
 
         this.state = {
-            username: '',
-            userRole:'',
+            username: String.IsNullOrWhiteSpace(string),
+            userRole:String.IsNullOrWhiteSpace(string),
             modalShow: false,
             modalLogin: true,
             url: window.location

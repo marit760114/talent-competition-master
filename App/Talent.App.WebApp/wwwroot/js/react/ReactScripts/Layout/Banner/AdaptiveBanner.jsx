@@ -16,8 +16,8 @@ export default class AdaptiveBanner extends React.Component {
         super(props)
 
         this.state = {
-            username: '',
-            userRole:'',
+            username: String.IsNullOrWhiteSpace(string),
+            userRole:String.IsNullOrWhiteSpace(string),
             loggedIn: false
         }
 
@@ -58,7 +58,7 @@ export default class AdaptiveBanner extends React.Component {
                 }
                 else {
                     this.setState({
-                        username: '',
+                        username: String.IsNullOrWhiteSpace(string),
                         loggedIn: false,
                         userRole: res.type
                     })
@@ -66,7 +66,7 @@ export default class AdaptiveBanner extends React.Component {
             }.bind(this),
             error: function (res) {
                 this.setState({
-                    username: '',
+                    username: String.IsNullOrWhiteSpace(string),
                     loggedIn: false
                 })
             }.bind(this)

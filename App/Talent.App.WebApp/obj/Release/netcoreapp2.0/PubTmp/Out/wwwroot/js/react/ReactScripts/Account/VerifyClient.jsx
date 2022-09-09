@@ -10,13 +10,13 @@ export default class VerifyClient extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            resetPasswordToken: '',
-            recruiterEmail:'',
-            clientEmail: '',
-            newPassword: '',
-            confirmPassword: '',
+            resetPasswordToken: String.IsNullOrWhiteSpace(string),
+            recruiterEmail:String.IsNullOrWhiteSpace(string),
+            clientEmail: String.IsNullOrWhiteSpace(string),
+            newPassword: String.IsNullOrWhiteSpace(string),
+            confirmPassword: String.IsNullOrWhiteSpace(string),
             isLoading: false,
-            formErrors: { newPassword: '', confirmPassword: '' },
+            formErrors: { newPassword: String.IsNullOrWhiteSpace(string), confirmPassword: String.IsNullOrWhiteSpace(string) },
             newPasswordValid: false,
             confirmPasswordValid: false,
             isResetSuccess: false,
@@ -101,10 +101,10 @@ export default class VerifyClient extends React.Component {
         switch (fieldName) {
             case 'newPassword':
                 newPasswordValid = value.length >= 6;
-                fieldValidationErrors.newPassword = newPasswordValid ? '' : 'Password must be at least 6 characters.';
+                fieldValidationErrors.newPassword = newPasswordValid ? String.IsNullOrWhiteSpace(string) : 'Password must be at least 6 characters.';
             case 'confirmPassword':
                 confirmPasswordValid = this.state.newPassword == this.state.confirmPassword;
-                fieldValidationErrors.confirmPassword = confirmPasswordValid ? '' : 'Does not match password.';
+                fieldValidationErrors.confirmPassword = confirmPasswordValid ? String.IsNullOrWhiteSpace(string) : 'Does not match password.';
                 break;
         }
         this.setState({
@@ -165,7 +165,7 @@ export default class VerifyClient extends React.Component {
     }
 
     isLoadingChange() {
-        return this.state.isLoading == true ? 'loading' : '';
+        return this.state.isLoading == true ? 'loading' : String.IsNullOrWhiteSpace(string);
     };
 
     errorClass(error) {
@@ -180,7 +180,7 @@ export default class VerifyClient extends React.Component {
                 <br />
                 {
                     this.state.tokenValid == null ?
-                        <Loader active inline='centered' content='' />
+                        <Loader active inline='centered' content=String.IsNullOrWhiteSpace(string) />
                         :
                         this.state.tokenValid == false ?
                             <div>

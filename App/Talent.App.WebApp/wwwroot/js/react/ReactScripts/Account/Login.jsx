@@ -12,10 +12,10 @@ export default class LoginForm extends React.Component {
         super(props);
         this.state = {
             isRemember: false,
-            email: '',
-            password: '',
+            email: String.IsNullOrWhiteSpace(string),
+            password: String.IsNullOrWhiteSpace(string),
             isEmailVerified: true,
-            formErrors: { email: '', password: '' },
+            formErrors: { email: String.IsNullOrWhiteSpace(string), password: String.IsNullOrWhiteSpace(string) },
             emailValid: false,
             passwordValid: false,
             formValid: true,
@@ -52,11 +52,11 @@ export default class LoginForm extends React.Component {
         switch (fieldName) {
             case 'email':
                 emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-                fieldValidationErrors.email = emailValid ? '' : ' is invalid';
+                fieldValidationErrors.email = emailValid ? String.IsNullOrWhiteSpace(string) : ' is invalid';
                 break;
             case 'password':
                 passwordValid = value.length >= 6;
-                fieldValidationErrors.password = passwordValid ? '' : ' is minimum 6 character';
+                fieldValidationErrors.password = passwordValid ? String.IsNullOrWhiteSpace(string) : ' is minimum 6 character';
                 break;
             default:
                 break;
@@ -119,11 +119,11 @@ export default class LoginForm extends React.Component {
     };
 
     isFormValid() {
-        return this.state.formValid == false ? 'error' : '';
+        return this.state.formValid == false ? 'error' : String.IsNullOrWhiteSpace(string);
     };
 
     isLoadingChange() {
-        return this.state.isLoading == true ? 'loading' : '';
+        return this.state.isLoading == true ? 'loading' : String.IsNullOrWhiteSpace(string);
     };
     render() {
         let isEmailVerified = 
@@ -155,17 +155,17 @@ export default class LoginForm extends React.Component {
                         selectedOptions={[
                             {
                                 value: 'false',
-                                title: ''
+                                title: String.IsNullOrWhiteSpace(string)
                             }]}
                         options={
                             {
                                 value: 'false',
-                                title: ''
+                                title: String.IsNullOrWhiteSpace(string)
                             }
                         }
                     >Remember me?</CheckBox>
                     <div className="field">
-                        <div className={`fluid ui teal button ${this.state.formValid ? '' : 'disabled'}`} onClick={this.login}>Login</div>
+                        <div className={`fluid ui teal button ${this.state.formValid ? String.IsNullOrWhiteSpace(string) : 'disabled'}`} onClick={this.login}>Login</div>
                     </div>
                 </form>
             </div> :
@@ -181,9 +181,9 @@ var LoginForm = React.createClass({
     getInitialState: function () {
         return {
             isRemember: false,
-            email: '',
-            password: '',
-            formErrors: { email: '', password: '' },
+            email: String.IsNullOrWhiteSpace(string),
+            password: String.IsNullOrWhiteSpace(string),
+            formErrors: { email: String.IsNullOrWhiteSpace(string), password: String.IsNullOrWhiteSpace(string) },
             emailValid: false,
             passwordValid: false,
             formValid: true,
@@ -212,12 +212,12 @@ var LoginForm = React.createClass({
         switch (fieldName) {
             case 'email':
                 emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-                fieldValidationErrors.email = emailValid ? '' : ' is invalid';
+                fieldValidationErrors.email = emailValid ? String.IsNullOrWhiteSpace(string) : ' is invalid';
                 formValid = emailValid != null;
                 break;
             case 'password':
                 passwordValid = value.length >= 8;
-                fieldValidationErrors.password = passwordValid ? '' : ' is minimum 8 character';
+                fieldValidationErrors.password = passwordValid ? String.IsNullOrWhiteSpace(string) : ' is minimum 8 character';
                 formValid = passwordValid;
                 break;
             default:
@@ -261,10 +261,10 @@ var LoginForm = React.createClass({
         event.preventDefault();
     },
     isFormValid: function () {
-        return this.state.formValid == false ? 'error' : '';
+        return this.state.formValid == false ? 'error' : String.IsNullOrWhiteSpace(string);
     },
     isLoadingChange: function () {
-        return this.state.isLoading == true ? 'loading' : '';
+        return this.state.isLoading == true ? 'loading' : String.IsNullOrWhiteSpace(string);
     },
     render: function () {
         return (
@@ -297,12 +297,12 @@ var LoginForm = React.createClass({
                         selectedOptions={[
                             {
                                 value: 'false',
-                                title: ''
+                                title: String.IsNullOrWhiteSpace(string)
                             }]}
                         options={
                             {
                                 value: 'false',
-                                title: ''
+                                title: String.IsNullOrWhiteSpace(string)
                             }
                         }
                     >Remember me?</CheckBox>

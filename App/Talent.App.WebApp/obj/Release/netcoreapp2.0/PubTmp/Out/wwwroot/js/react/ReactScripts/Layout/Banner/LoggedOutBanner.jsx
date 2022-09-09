@@ -14,7 +14,7 @@ export default class LoggedOutBanner extends React.Component {
 
         this.state = {
             modalState: false,
-            formType: '',
+            formType: String.IsNullOrWhiteSpace(string),
             isEmailVerified: true,
             reloadVersion: null
         };

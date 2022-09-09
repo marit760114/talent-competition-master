@@ -17,7 +17,7 @@ export class RadioButton extends React.Component {
             <div className="ui form">
                 <div className="inline fields register">
                     <label htmlFor="loginType">Sign Up As:</label>
-                    <div className={`ui buttons ${isError == true ? 'error' : ''} `}>
+                    <div className={`ui buttons ${isError == true ? 'error' : String.IsNullOrWhiteSpace(string)} `}>
                         <div className="field">
                             <div className="ui radio checkbox">
                                 <input type="radio" name="userRole" value='talent' tabIndex="0" checked={userRole == 'talent'} onChange={handleChange} />

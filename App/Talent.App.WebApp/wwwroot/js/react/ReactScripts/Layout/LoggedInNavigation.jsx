@@ -7,7 +7,7 @@ export class LoggedInNavigation extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            userType: ''
+            userType: String.IsNullOrWhiteSpace(string)
         }
         this.isUserAuthenticated = this.isUserAuthenticated.bind(this);
     };

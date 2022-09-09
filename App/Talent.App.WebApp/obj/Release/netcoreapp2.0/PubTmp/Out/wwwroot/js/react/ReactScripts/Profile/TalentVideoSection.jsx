@@ -52,7 +52,7 @@ export class TalentVideoSection extends Component {
                 saveVideoUrl={'https://talentservicesprofile.azurewebsites.net/profile/profile/updateTalentVideo'}
             />
         )
-        uploaders.push(<VideoUpload videoName='' updateProfileData={this.updateForComponentId} />)
+        uploaders.push(<VideoUpload videoName=String.IsNullOrWhiteSpace(string) updateProfileData={this.updateForComponentId} />)
 
         return (
             <React.Fragment>

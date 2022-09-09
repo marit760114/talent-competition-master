@@ -4,8 +4,8 @@ import { Modal, Button } from 'semantic-ui-react'
 import { Location } from '../../Employer/CreateJob/Location.jsx';
 
 export const searchOptions = {
-    name: '',
-    location: { country: '', city: '' }
+    name: String.IsNullOrWhiteSpace(string),
+    location: { country: String.IsNullOrWhiteSpace(string), city: String.IsNullOrWhiteSpace(string) }
 }
 
 export class SearchOptions extends React.Component {

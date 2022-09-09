@@ -19,7 +19,7 @@ export default class ManageClient extends React.Component {
             isAddClientOpen: false,
             isManageClientOpen: false,
             isInviteClientOpen: false,
-            clientId: ''
+            clientId: String.IsNullOrWhiteSpace(string)
         }
         this.loadData = this.loadData.bind(this);
         this.init = this.init.bind(this);
