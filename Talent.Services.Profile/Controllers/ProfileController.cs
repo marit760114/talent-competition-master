@@ -320,7 +320,7 @@ namespace Talent.Services.Profile.Controllers
 
         [HttpGet("getEmployerProfile")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "employer, recruiter")]
-        public async Task<IActionResult> GetEmployerProfile(String id = "", String role = "")
+        public async Task<IActionResult> GetEmployerProfile(String id = null, String role = null)
         {
             try
             {
@@ -410,7 +410,7 @@ namespace Talent.Services.Profile.Controllers
 
         [HttpGet("getTalentProfile")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "talent, employer, recruiter")]
-        public async Task<IActionResult> GetTalentProfile(String id = "")
+        public async Task<IActionResult> GetTalentProfile(String id = null)
         {
             String talentId = String.IsNullOrWhiteSpace(id) ? _userAppContext.CurrentUserId : id;
             var userProfile = await _profileService.GetTalentProfile(talentId);
@@ -449,7 +449,7 @@ namespace Talent.Services.Profile.Controllers
                 //                CurrentEmployment = "Software Developer at XYZ",
                 //                Level = "Junior",
                 //                Name = "Dummy User...",
-                //                PhotoId = "",
+                //                PhotoId = null,
                 //                Skills = new List<string> { "C#", ".Net Core", "Javascript", "ReactJS", "PreactJS" },
                 //                Summary = "Veronika Ossi is a set designer living in New York who enjoys kittens, music, and partying.",
                 //                Visa = "Citizen"
@@ -499,13 +499,13 @@ namespace Talent.Services.Profile.Controllers
 
         [HttpPost("getEmployerListFilter")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "recruiter")]
-        public IActionResult GetEmployerListFilter([FromBody]SearchCompanyModel model)
+        public async Task<IActionResult> GetEmployerListFilter([FromBody]SearchCompanyModel model)
         {
             try
             {
-                var result = _profileService.GetEmployerListByFilterAsync(model);//change to filters
+                Task<IEnumerable<TalentMatchingEmployerViewModel>> result = _profileService.GetEmployerListByFilterAsync(model);//change to filters
                 if (result.IsCompletedSuccessfully)
-                    return Json(new { Success = true, Data = result.Result });
+                    return Json(new { Success = true, Data = result });
                 else
                     return Json(new { Success = false, Message = "No Results found" });
             }
@@ -517,12 +517,12 @@ namespace Talent.Services.Profile.Controllers
 
         [HttpPost("getTalentListFilter")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public IActionResult GetTalentListFilter([FromBody] SearchTalentModel model)
+        public async Task<IActionResult> GetTalentListFilter([FromBody] SearchTalentModel model)
         {
             try
             {
-                var result = _profileService.GetTalentListByFilterAsync(model);//change to filters
-                return Json(new { Success = true, Data = result.Result });
+                var result = await _profileService.GetTalentListByFilterAsync(model);//change to filters
+                return Json(new { Success = true, Data = result });
             }
             catch (MongoException e)
             {

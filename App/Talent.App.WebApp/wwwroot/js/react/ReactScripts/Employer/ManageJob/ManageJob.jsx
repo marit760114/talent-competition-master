@@ -23,7 +23,6 @@ export default class ManageJob extends React.Component {
             sortBy: {
                 date: "desc"
             },
-            mainMenuIndex: 1,
             filter: {
                 showActive: true,
                 showClosed: false,
@@ -37,11 +36,12 @@ export default class ManageJob extends React.Component {
             totalPages: 1
 
         }
-        this.handleClick1 = this.handleClick1.bind(this);
+        //this.handleClick1 = this.handleClick1.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.handleSort = this.handleSort.bind(this);
         this.handleFilter = this.handleFilter.bind(this);
-        this.pageChange = this.pageChange.bind(this);
+        this.handlePaginationChange = this.handlePaginationChange.bind(this);
+        //this.pageChange = this.pageChange.bind(this);
 
         this.loadData = this.loadData.bind(this);
         this.init = this.init.bind(this);
@@ -51,9 +51,6 @@ export default class ManageJob extends React.Component {
     init() {
         let loaderData = TalentUtil.deepCopy(this.state.loaderData)
         loaderData.isLoading = false;
-        // this.setState({ loaderData });//comment this
-
-        //set loaderData.isLoading to false after getting data
         this.loadData(() =>
             this.setState({ loaderData })
         )
@@ -92,9 +89,11 @@ export default class ManageJob extends React.Component {
             success: function (res) {
                 if (res.success == true) {
                     TalentUtil.notification.show(res.message, "success", null, null);
-                    this.setState({ loadStatus: true, loadJobs: res.myJobs, totalPages: Math.ceil(res.totalCount / 2) }, callback);
+                    this.setState({ loadJobs: res.myJobs, totalPages: Math.ceil(res.totalCount / 6) }, callback);
+
                     console.log("totalcount" + res.totalCount)
                     console.log("myjob" + res.myJobs);
+
                     if ((this.state.currentPage > res.myJobs.length)) {
                         console.log("Last Page = Current page");
                         this.setState({
@@ -125,20 +124,22 @@ export default class ManageJob extends React.Component {
         });
     }
 
-
-    pageChange(e, pagData) {
-        this.setState({
-            currentPage: pagData.activePage,
-            totalPages: pagData.totalPages
-        })
-        console.log(pagData);
+    handlePaginationChange(e, { activePage }) {
+        this.loadNewData({ activePage: activePage });
     }
+
+    //pageChange(e, pagData) {
+    //    this.setState({
+    //        currentPage: pagData.activePage,
+    //        totalPages: pagData.totalPages
+    //    })
+    //    console.log(pagData);
+    //}
 
 
     handleSort(e, { value, name }) {
-        // debugger;
-        this.state.sortBy.date = value;
-        this.setState({ sortBy: this.state.sortBy })
+        this.state.sortBy[name] = value;
+        this.loadNewData({ sortBy: this.state.sortBy });
 
 
         console.log(name)
@@ -157,6 +158,7 @@ export default class ManageJob extends React.Component {
     handleClick(e, titleProps) {
         console.log("HandleClick");
         console.log(titleProps);
+
         const { index } = titleProps
         const { activeIndex } = this.state
         const newIndex = activeIndex === index ? -1 : index
@@ -164,38 +166,47 @@ export default class ManageJob extends React.Component {
     }
 
 
-    handleClick1(e, titleProps) {
-        console.log("HandleClick1");
-        console.log(titleProps);
-        const { index } = titleProps;
-        console.log("HandleClick1---Index");
-        const { mainMenuIndex } = this.state;
-        console.log("HandleClick1----mainMenuIndex");
-        const newIndex = mainMenuIndex === index ? -1 : index
+    //handleClick1(e, titleProps) {
+    //    console.log("HandleClick1");
+    //    console.log(titleProps);
 
-        this.setState({ mainMenuIndex: newIndex })
-    }
+    //    const { index } = titleProps;
+    //    console.log("HandleClick1---Index");
+    //    const { mainMenuIndex } = this.state;
+    //    console.log("HandleClick1----mainMenuIndex");
+    //    const newIndex = mainMenuIndex === index ? -1 : index
+
+    //    this.setState({ mainMenuIndex: newIndex })
+    //}
 
     render() {
         var jblist = this.state.loadJobs;
         var result = undefined;
         console.log(jblist);
         const { activeIndex } = this.state;
-        const { mainMenuIndex } = this.state;
+        //const { mainMenuIndex } = this.state;
 
         if (this.state.loadStatus) {
             if (this.state.loadJobs.length > 0) {
+
+                res = this.state.loadJobs.map(x =>
+                    <JobSummaryCard
+                        key={x.id}
+                        data={x}
+                        reloadData={this.loadData}
+                    />);
+
                 return (
                     <BodyWrapper reload={this.init} loaderData={this.state.loaderData}>
                         <div className="ui container">
                             <h1>List of Job</h1>
                             <Accordion as={Menu} vertical >
                                 <Menu.Item>
-                                    <Accordion.Title active={mainMenuIndex === 0} index={0} onClick={this.handleClick1} >
+                                    <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick} >
                                         <Icon name='filter' /> {"Filter:"}
                                         <Icon name='dropdown' />
                                     </Accordion.Title>
-                                    <Accordion.Content active={mainMenuIndex === 0} >
+                                    <Accordion.Content active={activeIndex === 0} >
                                         <Accordion as={Menu} vertical>
                                             <Menu.Item>
                                                 <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
@@ -218,22 +229,31 @@ export default class ManageJob extends React.Component {
                                         </Accordion>
 
                                         <Accordion as={Menu} vertical>
-                                            <Menu.Item>
-                                                <Accordion.Title active={activeIndex === 1} index={1} onClick={this.handleClick}>
-                                                    <Icon name='dropdown' />
-                                                    By Expiry Date
-                                                </Accordion.Title>
-                                                <Accordion.Content active={activeIndex === 1}>
-                                                    <Form>
-                                                        <Form.Group grouped>
-                                                            <Checkbox label='Expired Jobs'
-                                                                name="showExpired" onChange={this.handleFilter} checked={this.state.filter.showExpired} />
-                                                            <Checkbox label='Unexpired Jobs'
-                                                                name="showUnexpired" onChange={this.handleFilter} checked={this.state.filter.showUnexpired} />
-                                                        </Form.Group>
-                                                    </Form>
-                                                </Accordion.Content>
+                                            <Menu.Item key={"expiryDate"}>
+                                                <Accordion>
+                                                    <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
+                                                        <Icon name='dropdown' />
+                                                        By Expiry Date
+                                                    </Accordion.Title>
+                                                    <Accordion.Content active={activeIndex === 0}>
+                                                        <Form>
+                                                            <Form.Group grouped>
+                                                                <Form.Checkbox label='Expired Jobs'
+                                                                    name="showExpired" onChange={this.handleFilter} checked={this.state.filter.showExpired} />
+                                                                <Form.Checkbox label='Unexpired Jobs'
+                                                                    name="showUnexpired" onChange={this.handleFilter} checked={this.state.filter.showUnexpired} />
+                                                            </Form.Group>
+                                                        </Form>
+                                                    </Accordion.Content>
+                                                </Accordion>
                                             </Menu.Item>
+                                            <button className="ui teal small button"
+                                                style={{ width: "100%", borderRadius: "0" }}
+                                                onClick={() => this.loadNewData({ activePage: 1 })}
+                                            >
+                                                <Icon className="filter icon" />
+                                                Filter
+                                            </button>
                                         </Accordion>
                                         <Accordion as={Menu} vertical>
                                             <Menu.Item>
@@ -247,10 +267,16 @@ export default class ManageJob extends React.Component {
 
                                                             <Checkbox radio
                                                                 label='Newest First'
-                                                                name='date'
-                                                                value='desc'
+                                                                //name='date'
+                                                                //value='desc'
                                                                 checked={this.state.sortBy.date === 'desc'}
-                                                                onChange={this.handleSort} />
+                                                                //onChange={this.handleSort}
+
+                                                                name="date"
+                                                                onChange={this.handleSort}
+                                                                className="manage-jobs"
+                                                                value={this.state.sortBy.date}
+                                                            />
                                                         </Form.Field>
                                                         <Form.Field>
                                                             <Checkbox radio
@@ -307,7 +333,7 @@ export default class ManageJob extends React.Component {
                                 nextItem={{ content: <Icon name='angle right' />, icon: true }}
                                 totalPages={this.state.totalPages}
                                 activePage={this.state.currentPage}
-                                onPageChange={(e, pagData) => this.pageChange(e, pagData)}
+                                onPageChange={this.handlePaginationChange}
                             />
                         </div>
                     </BodyWrapper>

@@ -170,7 +170,7 @@ namespace Talent.Services.Identity.Controllers
                     return Json(new { Success = false, Message = "Parameter can not be null" });
                 }
 
-                string EmployerId = "";
+                string EmployerId = null;
                 if (command.ClientId == null)
                 {
                     //add client

@@ -75,12 +75,12 @@ namespace Talent.Services.Profile.Domain.Services
                     break;
             }
 
-            var videoUrl = "";
+            var videoUrl = null;
 
             if (profile != null)
             {
                 videoUrl = string.IsNullOrWhiteSpace(profile.VideoName)
-                          ? ""
+                          ? null
                           : await _fileService.GetFileURL(profile.VideoName, FileType.UserVideo);
 
                 var skills = profile.Skills.Select(x => ViewModelFromSkill(x)).ToList();

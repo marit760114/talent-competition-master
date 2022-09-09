@@ -74,21 +74,21 @@ namespace Talent.Common.Models
 
 
 /*jobData: {
-                title: "",
-                description: "",
-                logoUrl: "",
-                summary: "",
+                title: null,
+                description: null,
+                logoUrl: null,
+                summary: null,
                 applicantDetails: {
                     yearsOfExperience: { years: 0, months: 0 },
                     qualifications: [],
                     visaStatus:[]
                 },
                 jobDetails: {
-                    categories: { category: "", subCategory: "" },
+                    categories: { category: null, subCategory: null },
                     jobType: [],
                     startDate: moment(),
                     salary: { from: 0, to: 0 },
-                    location: { country: "", city: ""}
+                    location: { country: null, city: null}
                 }
             }
 */

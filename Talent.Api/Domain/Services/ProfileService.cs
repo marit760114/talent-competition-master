@@ -71,7 +71,7 @@ namespace Talent.Api.Domain.Services
             var user = await _userRepository.GetByIdAsync(Id);
 
             var videoUrl = string.IsNullOrWhiteSpace(user.VideoName)
-                           ? ""
+                           ? null
                            : await _fileService.GetFileURL(user.VideoName, FileType.UserVideo);
 
             var result = new TalentProfileViewModel
@@ -145,10 +145,10 @@ namespace Talent.Api.Domain.Services
 
             // Generating the models is I/O-bound on getting the video URLs from AWS
             // Running them in parallel should improve performance
-            var tasks = userChunk.Select(x => BuildTalentVideoModel(x));
+            var tasks =  userChunk.Select(async x => await BuildTalentVideoModel(x));
             await Task.WhenAll(tasks);
 
-            return tasks.Select(x => x.Result);
+            return (IEnumerable<TalentVideoMobileViewModel>)tasks.Select(x => x);
         }
 
         #region Conversion Helpers
@@ -197,7 +197,7 @@ namespace Talent.Api.Domain.Services
                 VideoUrl = videoUrl,
                 TalentName = name,
                 TalentId = user.Id,
-                LinkedInUrl = ""
+                LinkedInUrl = null
             };
         }
 

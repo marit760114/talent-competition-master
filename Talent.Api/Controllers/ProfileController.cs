@@ -18,13 +18,13 @@ namespace Talent.Api.Controllers
         }
 
         // GET: /<controller>/
-        [HttpGet("")]
+        [HttpGet(null)]
         public IActionResult Get()
         {
             return Content("Hello from Profile Api");
         }
 
-        [HttpPost("")]
+        [HttpPost(null)]
         public async Task<IActionResult> Post([FromBody]AuthenticateUser command)
         {
             await _busClient.PublishAsync(command);

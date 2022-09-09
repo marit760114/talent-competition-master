@@ -556,7 +556,7 @@ namespace Talent.Services.Identity.Domain.Services
 
         public string GetUserRoleString(UserRole userRole)
         {
-            string myString = "";
+            string myString = null;
             switch (userRole)
             {
                 case UserRole.Talent:

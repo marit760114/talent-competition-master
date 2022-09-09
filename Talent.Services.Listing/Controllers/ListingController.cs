@@ -49,12 +49,12 @@ namespace Talent.Services.Listing.Controllers
 
         [HttpPost("createUpdateJob")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "employer, recruiter")]
-        public IActionResult CreateUpdateJob([FromBody]Job jobData)
+        public async Task<IActionResult> CreateUpdateJob([FromBody]Job jobData)
         {
             try
             {
-                string message = "";
-                if (jobData.Id == "")
+                string message = null;
+                if (jobData.Id == null)
                 {
                     jobData.EmployerID = _userAppContext.CurrentUserId;
                     jobData.Status = JobStatus.Active;
@@ -64,7 +64,7 @@ namespace Talent.Services.Listing.Controllers
                 }
                 else
                 {
-                    string employerId = _jobService.GetJobByIDAsync(jobData.Id).Result.EmployerID;
+                    string employerId = (await _jobService.GetJobByIDAsync(jobData.Id)).EmployerID;
                     if (employerId == jobData.EmployerID)
                     {
                         _jobService.UpdateJob(jobData);
@@ -84,11 +84,11 @@ namespace Talent.Services.Listing.Controllers
 
         [HttpGet("GetJobByToEdit")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "employer, recruiter")]
-        public IActionResult GetJobByToEdit(string Id)
+        public async Task<IActionResult> GetJobByToEdit(string Id)
         {
             try
             {
-                var jobData = _jobService.GetJobByIDAsync(Id).Result;
+                var jobData = await _jobService.GetJobByIDAsync(Id);
                 if (jobData.EmployerID == _userAppContext.CurrentUserId && jobData.Status == JobStatus.Active)
                     return Json(new { Success = true, jobData });
                 else
@@ -102,12 +102,12 @@ namespace Talent.Services.Listing.Controllers
 
         [HttpGet("GetJobForCopy")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "employer, recruiter")]
-        public IActionResult GetJobForCopy(string Id)
+        public async Task<IActionResult> GetJobForCopy(string Id)
         {
             try
             {
-                var jobData = _jobService.GetJobByIDAsync(Id).Result;
-                jobData.Id = "";
+                var jobData = await _jobService.GetJobByIDAsync(Id);
+                jobData.Id = null;
                 if (jobData.EmployerID == _userAppContext.CurrentUserId)
                     return Json(new { Success = true, jobData });
                 else
@@ -120,11 +120,11 @@ namespace Talent.Services.Listing.Controllers
         }
         [HttpGet("getJobById")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "employer, recruiter")]
-        public IActionResult GetJobById(string Id)
+        public async Task<IActionResult> GetJobById(string Id)
         {
             try
             {
-                var jobData = _jobService.GetJobByIDAsync(Id).Result;
+                var jobData = await _jobService.GetJobByIDAsync(Id);
                 return Json(new { Success = true, jobData });
             }
             catch
@@ -134,11 +134,11 @@ namespace Talent.Services.Listing.Controllers
         }
         [HttpGet("getJobForTalentMatching")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "recruiter")]
-        public IActionResult getJobForTalentMatching(string Id)
+        public async Task<IActionResult> getJobForTalentMatching(string Id)
         {
             try
             {
-                var jobData = _jobService.GetJobForTalentMatching(Id, _userAppContext.CurrentUserId).Result;
+                var jobData = await _jobService.GetJobForTalentMatching(Id, _userAppContext.CurrentUserId);
                 return Json(new { Success = true, jobData });
             }
             catch

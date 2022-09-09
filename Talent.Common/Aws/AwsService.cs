@@ -75,7 +75,7 @@ namespace Talent.Common.Aws
             {
                 Console.WriteLine("Listing objects stored in a bucket");
                 SessionAWSCredentials tempCredentials = await GetTemporaryCredentials();
-                string responseBody = "";
+                string responseBody = null;
                 // Create client by providing temporary security credentials.
                 using (client = new AmazonS3Client(tempCredentials, Amazon.RegionEndpoint.APSoutheast2))
                 {
@@ -113,7 +113,7 @@ namespace Talent.Common.Aws
         public async Task<string> GetPresignedUrlObject(string name, string bucketName)
         {
             SessionAWSCredentials tempCredentials = await GetTemporaryCredentials();
-            string urlString = "";
+            string urlString = null;
             GetPreSignedUrlRequest presignedRequest = new GetPreSignedUrlRequest
             {
                 BucketName = bucketName,

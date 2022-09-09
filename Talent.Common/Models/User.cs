@@ -75,12 +75,12 @@ namespace Talent.Common.Models
 
         public Address()
         {
-            Number = "";
-            Street = "";
-            Suburb = "";
+            Number = null;
+            Street = null;
+            Suburb = null;
             PostCode = 0;
-            City = "";
-            Country = "";
+            City = null;
+            Country = null;
         }
     }
 
@@ -91,8 +91,8 @@ namespace Talent.Common.Models
 
         public LinkedAccounts()
         {
-            LinkedIn = "";
-            Github = "";
+            LinkedIn = null;
+            Github = null;
         }
     }
 
@@ -103,7 +103,7 @@ namespace Talent.Common.Models
 
         public JobSeekingStatus()
         {
-            Status = "";
+            Status = null;
             AvailableDate = null;
         }
     }
