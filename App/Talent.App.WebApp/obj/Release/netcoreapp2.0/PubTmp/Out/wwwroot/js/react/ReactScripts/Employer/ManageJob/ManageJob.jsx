@@ -1,11 +1,13 @@
 ﻿import React from 'react';
 import ReactDOM from 'react-dom';
 import Cookies from 'js-cookie';
+import moment from 'moment';
 import LoggedInBanner from '../../Layout/Banner/LoggedInBanner.jsx';
 import { LoggedInNavigation } from '../../Layout/LoggedInNavigation.jsx';
 import { JobSummaryCard } from './JobSummaryCard.jsx';
 import { BodyWrapper, loaderData } from '../../Layout/BodyWrapper.jsx';
-import { Pagination, Icon, Dropdown, Checkbox, Accordion, Form, Segment } from 'semantic-ui-react';
+import { Pagination, Icon, Dropdown, Checkbox, Accordion, Form, Segment, Button, Card, Image, Menu } from 'semantic-ui-react';
+
 
 export default class ManageJob extends React.Component {
     constructor(props) {
@@ -13,6 +15,7 @@ export default class ManageJob extends React.Component {
         let loader = loaderData
         loader.allowedUsers.push("Employer");
         loader.allowedUsers.push("Recruiter");
+        console.log(loader)
         this.state = {
             loadJobs: [],
             loaderData: loader,
@@ -27,16 +30,22 @@ export default class ManageJob extends React.Component {
                 showExpired: true,
                 showUnexpired: true
             },
-            totalPages: 1,
-            activeIndex: null
+            activeIndex: 0,
+            loadStatus: false,
+            currentPage: 1,
+            totalPages: 1
+
         }
+        //this.handleClick1 = this.handleClick1.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        this.handleSort = this.handleSort.bind(this);
+        this.handleFilter = this.handleFilter.bind(this);
+        this.handlePaginationChange = this.handlePaginationChange.bind(this);
+        //this.pageChange = this.pageChange.bind(this);
+
         this.loadData = this.loadData.bind(this);
         this.init = this.init.bind(this);
-        this.handlePaginationChange = this.handlePaginationChange.bind(this);
-        this.handleSortChange = this.handleSortChange.bind(this);
-        this.handleFilter = this.handleFilter.bind(this);
         this.loadNewData = this.loadNewData.bind(this);
-        this.handleClick = this.handleClick.bind(this);
     };
 
     init() {
@@ -45,6 +54,8 @@ export default class ManageJob extends React.Component {
         this.loadData(() =>
             this.setState({ loaderData })
         )
+
+        console.log(this.state.loaderData)
     }
 
     componentDidMount() {
@@ -52,8 +63,11 @@ export default class ManageJob extends React.Component {
     };
 
     loadData(callback) {
-        var link = 'http://localhost:51689/listing/listing/getSortedEmployerJobs';
+        var link = 'https://talentservicestalent.azurewebsites.net/listing/listing/getSortedEmployerJobs';
+
         var cookies = Cookies.get('talentAuthToken');
+        // your ajax call and other logic goes here
+
         $.ajax({
             url: link,
             headers: {
@@ -61,6 +75,8 @@ export default class ManageJob extends React.Component {
                 'Content-Type': 'application/json'
             },
             type: "GET",
+            contentType: "application/json",
+            dataType: "json",
             data: {
                 activePage: this.state.activePage,
                 sortByDate: this.state.sortBy.date,
@@ -70,37 +86,28 @@ export default class ManageJob extends React.Component {
                 showExpired: this.state.filter.showExpired,
                 showUnexpired: this.state.filter.showUnexpired
             },
-            contentType: "application/json",
-            dataType: "json",
             success: function (res) {
-                console.log(res);
-                this.setState({ loadJobs: res.myJobs, totalPages: Math.ceil(res.totalCount / 6) }, callback);
-            }.bind(this),
-            error: function (res, a, b) {
-                //this.init();
+                if (res.success == true) {
+                    TalentUtil.notification.show(res.message, "success", null, null);
+                    this.setState({ loadJobs: res.myJobs, totalPages: Math.ceil(res.totalCount / 6) }, callback);
 
-                console.log(res)
-                console.log(a)
-                console.log(b)
+                    console.log("totalcount" + res.totalCount)
+                    console.log("myjob" + res.myJobs);
 
+                    if ((this.state.currentPage > res.myJobs.length)) {
+                        console.log("Last Page = Current page");
+                        this.setState({
+                            currentPage: this.state.currentPage == 1 ? 1 : this.state.currentPage - 1,
+                        });
+                    }
+
+                } else {
+                    TalentUtil.notification.show(res.message, "error", null, null)
+                    console.log(res.message);
+                }
             }.bind(this)
         })
-    }
 
-    handlePaginationChange(e, { activePage }) {
-        this.loadNewData({ activePage: activePage });
-    }
-
-    handleSortChange(e, { value, name }) {
-        this.state.sortBy[name] = value;
-        this.loadNewData({ sortBy: this.state.sortBy });
-    }
-
-    handleFilter(e, { checked, name }) {
-        this.state.filter[name] = checked;
-        this.setState({
-            filter: this.state.filter
-        })
     }
 
     loadNewData(data) {
@@ -116,72 +123,113 @@ export default class ManageJob extends React.Component {
             })
         });
     }
+
+    handlePaginationChange(e, { activePage }) {
+        this.loadNewData({ activePage: activePage });
+    }
+
+    //pageChange(e, pagData) {
+    //    this.setState({
+    //        currentPage: pagData.activePage,
+    //        totalPages: pagData.totalPages
+    //    })
+    //    console.log(pagData);
+    //}
+
+
+    handleSort(e, { value, name }) {
+        this.state.sortBy[name] = value;
+        this.loadNewData({ sortBy: this.state.sortBy });
+
+
+        console.log(name)
+        console.log(value)
+
+
+    }
+
+    handleFilter(e, { checked, name }) {
+        this.state.filter[name] = checked;
+        this.setState({
+            filter: this.state.filter
+        })
+    }
+
     handleClick(e, titleProps) {
+        console.log("HandleClick");
+        console.log(titleProps);
+
         const { index } = titleProps
         const { activeIndex } = this.state
         const newIndex = activeIndex === index ? -1 : index
-
         this.setState({ activeIndex: newIndex })
     }
+
+
+    //handleClick1(e, titleProps) {
+    //    console.log("HandleClick1");
+    //    console.log(titleProps);
+
+    //    const { index } = titleProps;
+    //    console.log("HandleClick1---Index");
+    //    const { mainMenuIndex } = this.state;
+    //    console.log("HandleClick1----mainMenuIndex");
+    //    const newIndex = mainMenuIndex === index ? -1 : index
+
+    //    this.setState({ mainMenuIndex: newIndex })
+    //}
+
     render() {
-        var res = undefined;
-        if (this.state.loadJobs.length > 0) {
-
-            res = this.state.loadJobs.map(x =>
-                <JobSummaryCard
-                    key={x.id}
-                    data={x}
-                    reloadData={this.loadData}
-                />);
-        }
-        const options = [
-            {
-                key: 'desc',
-                text: 'Newest first',
-                value: 'desc',
-                content: 'Newest first',
-            },
-            {
-                key: 'asc',
-                text: 'Oldest first',
-                value: 'asc',
-                content: 'Oldest first',
-            }
-        ];
-
+        var jblist = this.state.loadJobs;
+        var result = undefined;
+        console.log(jblist);
         const { activeIndex } = this.state;
-        return (
-            <BodyWrapper reload={this.init} loaderData={this.state.loaderData}>
-                <div className="ui container">
-                    <div className="ui grid">
-                        <div className="row">
-                            <div className="sixteen wide column">
-                                <h1>List of Jobs</h1>
-                                <span>
-                                    <i className="filter icon" /> {"Filter: "}
-                                    <Dropdown inline simple text="Choose filter">
-                                        <Dropdown.Menu>
-                                            <Dropdown.Item key={"status"}>
-                                                <Accordion>
-                                                    <Accordion.Title active={activeIndex === 1} index={1} onClick={this.handleClick}>
-                                                        <Icon name='dropdown' />
-                                                        By Status
-                                                    </Accordion.Title>
-                                                    <Accordion.Content active={activeIndex === 1}>
-                                                        <Form>
-                                                            <Form.Group grouped>
-                                                                <Form.Checkbox label='Active Jobs'
-                                                                    name="showActive" onChange={this.handleFilter} checked={this.state.filter.showActive} />
-                                                                <Form.Checkbox label='Closed Jobs'
-                                                                    name="showClosed" onChange={this.handleFilter} checked={this.state.filter.showClosed} />
-                                                                <Form.Checkbox label='Drafts'
-                                                                    name="showDraft" onChange={this.handleFilter} checked={this.state.filter.showDraft} />
-                                                            </Form.Group>
-                                                        </Form>
-                                                    </Accordion.Content>
-                                                </Accordion>
-                                            </Dropdown.Item>
-                                            <Dropdown.Item key={"expiryDate"}>
+        //const { mainMenuIndex } = this.state;
+
+        if (this.state.loadStatus) {
+            if (this.state.loadJobs.length > 0) {
+
+                res = this.state.loadJobs.map(x =>
+                    <JobSummaryCard
+                        key={x.id}
+                        data={x}
+                        reloadData={this.loadData}
+                    />);
+
+                return (
+                    <BodyWrapper reload={this.init} loaderData={this.state.loaderData}>
+                        <div className="ui container">
+                            <h1>List of Job</h1>
+                            <Accordion as={Menu} vertical >
+                                <Menu.Item>
+                                    <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick} >
+                                        <Icon name='filter' /> {"Filter:"}
+                                        <Icon name='dropdown' />
+                                    </Accordion.Title>
+                                    <Accordion.Content active={activeIndex === 0} >
+                                        <Accordion as={Menu} vertical>
+                                            <Menu.Item>
+                                                <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
+                                                    <Icon name='dropdown' />
+                                                    By Status
+                                                </Accordion.Title>
+                                                <Accordion.Content active={activeIndex === 0} >
+                                                    <Form>
+                                                        <Form.Group grouped>
+                                                            <Checkbox label='Active Jobs'
+                                                                name="showActive" onChange={this.handleFilter} checked={this.state.filter.showActive} />
+                                                            <Checkbox label='Closed Jobs'
+                                                                name="showClosed" onChange={this.handleFilter} checked={this.state.filter.showClosed} />
+                                                            <Checkbox label='Drafts'
+                                                                name="showDraft" onChange={this.handleFilter} checked={this.state.filter.showDraft} />
+                                                        </Form.Group>
+                                                    </Form>
+                                                </Accordion.Content>
+                                            </Menu.Item>
+                                        </Accordion>
+
+                                        <Accordion as={Menu} vertical>
+                                            <Menu.Item key={"expiryDate"}>
                                                 <Accordion>
                                                     <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
                                                         <Icon name='dropdown' />
@@ -198,43 +246,85 @@ export default class ManageJob extends React.Component {
                                                         </Form>
                                                     </Accordion.Content>
                                                 </Accordion>
-                                            </Dropdown.Item>
+                                            </Menu.Item>
                                             <button className="ui teal small button"
                                                 style={{ width: "100%", borderRadius: "0" }}
                                                 onClick={() => this.loadNewData({ activePage: 1 })}
                                             >
-                                                <i className="filter icon" />
+                                                <Icon className="filter icon" />
                                                 Filter
                                             </button>
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                </span>
-                                <span>
-                                    <i className="calendar icon" />
-                                    {"Sort by date: "}
-                                    <Dropdown inline simple options={options}
-                                        name="date"
-                                        onChange={this.handleSortChange}
-                                        className="manage-jobs"
-                                        value={this.state.sortBy.date}
-                                    />
-                                </span>
-                                <div className="ui three cards">
-                                    {
-                                        res != undefined ?
-                                            res
-                                            : <React.Fragment>
-                                                <p style={{
-                                                    paddingTop: 20,
-                                                    paddingBottom: 50,
-                                                    marginLeft: 15
-                                                }}>No Jobs Found</p>
-                                            </React.Fragment>
+                                        </Accordion>
+                                        <Accordion as={Menu} vertical>
+                                            <Menu.Item>
+                                                <Accordion.Title active={activeIndex === 2} index={2} onClick={this.handleClick}>
+                                                    <Icon name='dropdown' />
+                                                    Order By Date
+                                                </Accordion.Title>
+                                                <Accordion.Content active={activeIndex === 2}>
+                                                    <Form>
+                                                        <Form.Field>
+
+                                                            <Checkbox radio
+                                                                label='Newest First'
+                                                                //name='date'
+                                                                //value='desc'
+                                                                checked={this.state.sortBy.date === 'desc'}
+                                                                //onChange={this.handleSort}
+
+                                                                name="date"
+                                                                onChange={this.handleSort}
+                                                                className="manage-jobs"
+                                                                value={this.state.sortBy.date}
+                                                            />
+                                                        </Form.Field>
+                                                        <Form.Field>
+                                                            <Checkbox radio
+                                                                label='Oldest First'
+                                                                name='date'
+                                                                value='asc'
+                                                                checked={this.state.sortBy.date === 'asc'}
+                                                                onChange={this.handleSort} />
+                                                        </Form.Field>
+                                                    </Form>
+                                                </Accordion.Content>
+                                            </Menu.Item>
+                                        </Accordion>
+
+                                    </Accordion.Content>
+                                </Menu.Item>
+                            </Accordion>
+                            <Card.Group key={jblist.toString()}>
+                                {this.state.loadJobs.map((j, index) => {
+                                    //    debugger;
+                                    if ((index >= ((this.state.currentPage * 2) - 2)) && (index < (this.state.currentPage * 2))) {
+                                        console.log("inside if index: " + index)
+                                        console.log("inside ifCurrentPage: " + this.state.currentPage)
+                                        return (
+
+                                            <Card>
+                                                <Card.Content>
+                                                    <Card.Header>{j.title}</Card.Header>
+                                                    <Card.Meta>{j.location.city + " , " + j.location.country}</Card.Meta>
+                                                    <Card.Description>
+                                                        {j.summary}
+                                                    </Card.Description>
+                                                </Card.Content>
+                                                <Card.Content extra>
+                                                    <Button.Group widths='3'>
+                                                        <Button basic color='blue' >
+                                                            Update
+                                                        </Button>
+                                                        <Button basic color='blue'>
+                                                            Close
+                                                        </Button>
+                                                    </Button.Group>
+                                                </Card.Content>
+                                            </Card>
+                                        )
                                     }
-                                </div>
-                            </div>
-                        </div>
-                        <div className="centered row">
+                                })}
+                            </Card.Group>
                             <Pagination
                                 ellipsisItem={{ content: <Icon name='ellipsis horizontal' />, icon: true }}
                                 firstItem={{ content: <Icon name='angle double left' />, icon: true }}
@@ -242,15 +332,28 @@ export default class ManageJob extends React.Component {
                                 prevItem={{ content: <Icon name='angle left' />, icon: true }}
                                 nextItem={{ content: <Icon name='angle right' />, icon: true }}
                                 totalPages={this.state.totalPages}
-                                activePage={this.state.activePage}
+                                activePage={this.state.currentPage}
                                 onPageChange={this.handlePaginationChange}
                             />
                         </div>
-                        <div className="row">
-                        </div>
-                    </div>
-                </div>
-            </BodyWrapper>
-        )
+                    </BodyWrapper>
+                )
+            }
+            else {
+                return (
+                    <div>
+                        <h1> List of Jobs</h1>
+                        <h3>No Jobs Found</h3>
+                    </div>);
+
+            }
+
+        } else {
+            return (
+                <div>
+                    <h2> L O A D I N G .....</h2>
+                    <Button primary onClick={() => this.loadData()}>Get Employer Jobs</Button>
+                </div>);
+        }
     }
 }

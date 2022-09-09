@@ -231,7 +231,7 @@ export default class ManageJob extends React.Component {
                                         <Accordion as={Menu} vertical>
                                             <Menu.Item key={"expiryDate"}>
                                                 <Accordion>
-                                                    <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
+                                                    <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick} onChange={this.handleFilter}>
                                                         <Icon name='dropdown' />
                                                         By Expiry Date
                                                     </Accordion.Title>
